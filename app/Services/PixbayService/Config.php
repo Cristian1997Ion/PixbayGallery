@@ -4,6 +4,9 @@
 namespace App\Services\PixbayService;
 
 
+
+use Exception;
+
 class Config
 {
     /**
@@ -60,14 +63,15 @@ class Config
     /**
      * @param string $name
      * @return mixed
+     * @throws Exception
      */
     public function getEndpoint(string $name)
     {
+        if (empty($this->endpoints[$name])) {
+            throw new Exception("Couldn't find '{$name}' endpoint!");
+        }
+
         return $this->endpoints[$name];
     }
 
-    public function getEndpointUrl(string $name)
-    {
-        return $this->endpoints[$name]['url'];
-    }
 }

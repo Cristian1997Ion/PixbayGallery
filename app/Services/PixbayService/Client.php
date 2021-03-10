@@ -30,11 +30,11 @@ class Client
     public function getPhotos($searchTerm = ''): string
     {
         $response = $this->guzzle->get(
-            $this->config->getEndpointUrl('photos'),
+            $this->config->getEndpoint('photos'),
             [
                 RequestOptions::QUERY => [
                     'key' => $this->config->getApiKey(),
-                    'q'   => $searchTerm
+                    'q' => $searchTerm
                 ]
             ]
         );

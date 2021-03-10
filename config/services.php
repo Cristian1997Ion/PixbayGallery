@@ -34,10 +34,7 @@ return [
         'domain'    => env('PIXBAY_DOMAIN'),
         'key'       => env('PIXBAY_API_KEY'),
         'endpoints' => [
-            'photos' => [
-                'url'    => 'api/',
-                'method' => 'GET'
-            ]
+            'photos' => 'api/',
         ]
     ]
 
