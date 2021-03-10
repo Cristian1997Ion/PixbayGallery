@@ -30,4 +30,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'pixbay' => [
+        'domain'    => env('PIXBAY_DOMAIN'),
+        'key'       => env('PIXBAY_API_KEY'),
+        'endpoints' => [
+            'photos' => [
+                'url'    => 'api/',
+                'method' => 'GET'
+            ]
+        ]
+    ]
+
 ];
