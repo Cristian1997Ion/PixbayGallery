@@ -21,3 +21,16 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+
+# Vue-Related
+
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+/public/js
+/public/css
+/public/build
+/public/mix-manifest.json
