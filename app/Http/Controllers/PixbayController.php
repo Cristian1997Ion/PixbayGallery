@@ -9,6 +9,6 @@ class PixbayController extends Controller
 {
     public function getImages(Request $request, Client $pixbayClient)
     {
-        return $pixbayClient->getPhotos();
+        return response()->json($pixbayClient->getPhotos());
     }
 }

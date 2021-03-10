@@ -41,6 +41,6 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        return response()->json(['images' => []]);
+        return response()->json(['images' => [], 'error' => $e->getMessage()]);
     }
 }

@@ -3,6 +3,7 @@
 
 namespace App\Services\PixbayService;
 
+use App\Services\PixbayService\Response\GenericPhotosResponse;
 use GuzzleHttp\RequestOptions;
 
 class Client
@@ -24,10 +25,10 @@ class Client
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->guzzle = new \GuzzleHttp\Client(['base_uri' => $config->getDomain()]);
+        $this->guzzle = new \GuzzleHttp\Client(['base_uri' => $config->getDomain() . '.kikiki']);
     }
 
-    public function getPhotos($searchTerm = ''): string
+    public function getPhotos($searchTerm = ''): array
     {
         $response = $this->guzzle->get(
             $this->config->getEndpoint('photos'),
@@ -39,6 +40,8 @@ class Client
             ]
         );
 
-        return $response->getBody()->getContents();
+        $genericResponse = new GenericPhotosResponse($response->getBody()->getContents());
+
+        return $genericResponse->asArray();
     }
 }
