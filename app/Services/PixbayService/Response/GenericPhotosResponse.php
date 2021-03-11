@@ -4,7 +4,10 @@
 namespace App\Services\PixbayService\Response;
 
 
-class GenericPhotosResponse
+use Illuminate\Contracts\Support\Responsable;
+use Symfony\Component\HttpFoundation\Response;
+
+class GenericPhotosResponse implements Responsable
 {
 
     /**
@@ -36,5 +39,10 @@ class GenericPhotosResponse
             'photoCount' => $this->photoCount,
             'photos'     => $this->photos,
         ];
+    }
+
+    public function toResponse($request): Response
+    {
+        return \response()->json($this->asArray());
     }
 }

@@ -45,7 +45,7 @@ return [
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false,
-            'storage_key' => 'remember_token'
+            'storage_key' => 'token'
         ],
     ],
 

@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -41,6 +45,18 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        return response()->json(['images' => [], 'error' => $e->getMessage()]);
+        if ($e instanceof NotFoundHttpException || $e instanceof MethodNotAllowedHttpException) {
+            return parent::render($request, $e);
+        }
+
+        if ($e instanceof ValidationException) {
+            return response()->json(['errors' => $e->errors()]);
+        }
+
+        if ($e instanceof GuzzleException) {
+            return response()->json(['error' => 'Something went wrong with guzzle, please check the logs!']);
+        }
+
+        return response()->json(['error' => $e->getMessage()]);
     }
 }

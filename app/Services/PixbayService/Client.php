@@ -28,7 +28,7 @@ class Client
         $this->guzzle = new \GuzzleHttp\Client(['base_uri' => $config->getDomain() . '.kikiki']);
     }
 
-    public function getPhotos($searchTerm = ''): array
+    public function getPhotos($searchTerm = ''): GenericPhotosResponse
     {
         $response = $this->guzzle->get(
             $this->config->getEndpoint('photos'),
@@ -40,8 +40,6 @@ class Client
             ]
         );
 
-        $genericResponse = new GenericPhotosResponse($response->getBody()->getContents());
-
-        return $genericResponse->asArray();
+        return new GenericPhotosResponse($response->getBody()->getContents());
     }
 }
