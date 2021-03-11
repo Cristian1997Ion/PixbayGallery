@@ -6,7 +6,7 @@
 
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav class="navbar-center">
-                <b-form-input size="sm" placeholder="Search"></b-form-input>
+                <b-form-input size="sm" placeholder="Search" @change="search" :value="$route.query.q"/>
             </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
@@ -43,6 +43,12 @@ export default {
             return this.auth.user.token !== null;
         }
     },
+
+    methods: {
+        search(searchTerm) {
+            location.href = '/web?q=' + searchTerm
+        }
+    }
 }
 </script>
 

@@ -42,12 +42,12 @@ class PhotosController extends Controller
             function($photo){
                 return [
                     'id'   => $photo['id'],
-                    'path' => $photo['path'],
+                    'url' => $photo['path'],
                 ];
             },
             $request->getUser()->photos()->get()->toArray()
         );
 
-        return response()->json($photos);
+        return response()->json(['photos' => $photos]);
     }
 }

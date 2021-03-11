@@ -7,13 +7,15 @@
     >
         <img :src="image.url" class="pixbay-photo img-thumbnail" alt=":(">
         <b-badge
+            v-if="showAuthor"
             class="label-default"
             variant="dark"
         >
             {{image.user}}
         </b-badge>
         <b-button
-            @click="savePhoto"
+            v-if="showAddToFavourites"
+            @click="storePhoto"
             v-show="hover"
             variant="dark"
             class="button-save"
@@ -38,13 +40,24 @@ export default {
     },
 
     props: {
-        image: Object
+        image: Object,
+        showAddToFavourites: {
+            type: Boolean,
+            default: true,
+        },
+        showAuthor: {
+            type: Boolean,
+            deafult: true,
+        }
     },
 
     methods: {
-        savePhoto(e) {
+        storePhoto(e) {
             e.stopPropagation();
-            alert();
+            this.$emit('storePhoto', {
+                photoUrl: this.image.url,
+                photoId: this.image.id
+            });
         }
     }
 }
