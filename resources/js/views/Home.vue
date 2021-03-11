@@ -3,6 +3,7 @@
         <div class="row pt-3">
             <pixbay-photo
                 v-for="photo in photos"
+                v-bind:key="photo.id"
                 :image="photo"
                 class="mb-2 col-md-4"
             />

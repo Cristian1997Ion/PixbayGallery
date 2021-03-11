@@ -10,7 +10,7 @@ class FailResponse implements Responsable
 {
     public function toArray(): array
     {
-        return ['error' => 'Authentication failed: wrong email or password'];
+        return ['errors' => ['email' => ['Authentication failed: wrong email or password']]];
     }
 
     public function toResponse($request)

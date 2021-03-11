@@ -1,3 +1,5 @@
+import auth from "./modules/auth";
+
 require('./bootstrap')
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -26,6 +28,7 @@ const store = new Vuex.Store({
     state: {},
 
     modules: {
+        auth: auth,
         pixbay: {}
     }
 })

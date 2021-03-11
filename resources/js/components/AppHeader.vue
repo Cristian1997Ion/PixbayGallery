@@ -14,8 +14,16 @@
                     <template #button-content>
                         <em>User</em>
                     </template>
-                    <b-dropdown-item href="#" @click="$emit('loginRequest')">Log In</b-dropdown-item>
-                    <b-dropdown-item href="#" @click="$emit('registerRequest')">Register</b-dropdown-item>
+                    <div v-if="authenticated">
+                        <b-dropdown-item href="#">
+                            <router-link to="/favourites">Favourites</router-link>
+                        </b-dropdown-item>
+                        <b-dropdown-item href="#" @click="$emit('signOut')">Sign Out</b-dropdown-item>
+                    </div>
+                    <div v-else>
+                        <b-dropdown-item href="#" @click="$emit('loginRequest')">Log In</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="$emit('registerRequest')">Register</b-dropdown-item>
+                    </div>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>
@@ -25,6 +33,16 @@
 <script>
 export default {
     name: "AppHeader",
+
+    computed: {
+        auth: function () {
+            return this.$store.state.auth;
+        },
+
+        authenticated: function() {
+            return this.auth.user.token !== null;
+        }
+    },
 }
 </script>
 

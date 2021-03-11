@@ -3,6 +3,7 @@
         <app-header
             @registerRequest="openModal('register')"
             @loginRequest="openModal('login')"
+            @signOut="onSignOut"
         />
 
         <auth-modal ref="auth"/>
@@ -21,8 +22,14 @@ export default {
 
     methods: {
         openModal(action) {
-            console.log(this.$refs);
-            this.$refs['auth'].show(action);
+            this.$refs.auth.show(action);
+        },
+
+        onSignOut() {
+            this.$store.dispatch('auth/signOut').then(() => {
+                console.log('sign-out');
+                location.reload();
+            });
         }
     }
 }
