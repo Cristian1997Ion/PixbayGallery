@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Class User
@@ -20,4 +21,9 @@ class User extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'email', 'password', 'token'];
+
+    public function photos(): MorphToMany
+    {
+        return $this->morphToMany(Photo::class, 'photoable');
+    }
 }

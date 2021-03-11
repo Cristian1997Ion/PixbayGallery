@@ -1,5 +1,7 @@
 <?php
 
+use Intervention\Image\ImageServiceProvider;
+
 return [
 
     /*
@@ -161,6 +163,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        ImageServiceProvider::class,
 
         /*
          * Package Service Providers...
