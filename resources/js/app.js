@@ -8,6 +8,7 @@ import BootstrapVue from 'bootstrap-vue'
 import App from './views/App.vue'
 import Home from './views/Home.vue'
 import './app.scss'
+import Favourites from "./views/Favourites";
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -21,6 +22,12 @@ const router = new VueRouter({
             name: 'home',
             component: Home
         },
+
+        {
+            path: '/web/favourites',
+            name: 'favourites',
+            component: Favourites
+        }
     ],
 })
 

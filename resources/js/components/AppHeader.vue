@@ -1,6 +1,6 @@
 <template>
     <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
-        <b-navbar-brand href="#">Pixbay Gallery</b-navbar-brand>
+        <b-navbar-brand href="/web">Pixbay Gallery</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -16,7 +16,7 @@
                     </template>
                     <div v-if="authenticated">
                         <b-dropdown-item href="#">
-                            <router-link to="/favourites">Favourites</router-link>
+                            <router-link :to="{name: 'favourites'}">Favourites</router-link>
                         </b-dropdown-item>
                         <b-dropdown-item href="#" @click="$emit('signOut')">Sign Out</b-dropdown-item>
                     </div>
