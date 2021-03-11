@@ -4,7 +4,9 @@
 namespace App\Services\PixbayService;
 
 use App\Services\PixbayService\Response\GenericPhotosResponse;
+use Exception;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Facades\Cache;
 
 class Client
 {
@@ -30,16 +32,27 @@ class Client
 
     public function getPhotos($searchTerm = ''): GenericPhotosResponse
     {
-        $response = $this->guzzle->get(
-            $this->config->getEndpoint('photos'),
-            [
-                RequestOptions::QUERY => [
-                    'key' => $this->config->getApiKey(),
-                    'q' => $searchTerm
+        $cacheKey = "photos_{$searchTerm}";
+        if (!$response = Cache::get($cacheKey)) {
+            $response = $this->guzzle->get(
+                $this->config->getEndpoint('photos'),
+                [
+                    RequestOptions::QUERY => [
+                        'key' => $this->config->getApiKey(),
+                        'q' => $searchTerm
+                    ]
                 ]
-            ]
-        );
+            );
 
-        return new GenericPhotosResponse($response->getBody()->getContents());
+            if ($response->getStatusCode() !== 200) {
+                throw new Exception("Something went wrong while downloading the photos");
+            }
+
+            $response = $response->getBody()->getContents();
+            Cache::put($cacheKey, $response, 24 * 3600);
+        }
+
+
+        return new GenericPhotosResponse($response);
     }
 }
