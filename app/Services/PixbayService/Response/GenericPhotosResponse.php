@@ -23,8 +23,9 @@ class GenericPhotosResponse
         foreach ($response->hits as $photo) {
             $this->photoCount++;
             $this->photos[] = [
-                'id'  => $photo->id,
-                'url' => $photo->webformatURL,
+                'id'   => $photo->id,
+                'url'  => $photo->webformatURL,
+                'user' => $photo->user
             ];
         }
     }

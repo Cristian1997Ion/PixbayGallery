@@ -1,16 +1,15 @@
-require('./bootstrap');
+require('./bootstrap')
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
-import './app.scss';
+import App from './views/App.vue'
+import Home from './views/Home.vue'
+import './app.scss'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
-
-import App from './views/App.vue'
-import Home from './views/Home.vue'
 
 const router = new VueRouter({
     mode: 'history',
@@ -21,20 +20,19 @@ const router = new VueRouter({
             component: Home
         },
     ],
-});
+})
 
 const store = new Vuex.Store({
     state: {},
 
-    modules: {}
+    modules: {
+        pixbay: {}
+    }
 })
-
-
 
 const app = new Vue({
     el: '#app',
     components: { App },
     store,
     router,
-});
-
+})

@@ -1,26 +1,36 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">PixbayTestApp</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
+        <b-navbar-brand href="#">Pixbay Gallery</b-navbar-brand>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
-                </li>
-            </ul>
-        </div>
-    </nav>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav class="navbar-center">
+                <b-form-input size="sm" placeholder="Search"></b-form-input>
+            </b-navbar-nav>
+
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item-dropdown right>
+                    <template #button-content>
+                        <em>User</em>
+                    </template>
+                    <b-dropdown-item href="#" @click="$emit('loginRequest')">Log In</b-dropdown-item>
+                    <b-dropdown-item href="#" @click="$emit('registerRequest')">Register</b-dropdown-item>
+                </b-nav-item-dropdown>
+            </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
 </template>
 
 <script>
 export default {
-    name: "AppHeader"
+    name: "AppHeader",
 }
 </script>
 
 <style scoped>
-
+    .navbar-center {
+        width: 80%;
+        margin: auto;
+    }
 </style>

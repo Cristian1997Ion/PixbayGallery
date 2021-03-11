@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PixbayTestApp</title>
 </head>
-<body>
+<body style="background: antiquewhite">
 <div id="app">
     <app></app>
 </div>
