@@ -20,6 +20,6 @@ class PixbayController extends Controller
      */
     public function getImages(Request $request, Client $pixbayClient): GenericPhotosResponse
     {
-        return $pixbayClient->getPhotos($request->get('q', ''));
+        return $pixbayClient->getPhotos($request->get('page', 1), $request->get('q', ''));
     }
 }

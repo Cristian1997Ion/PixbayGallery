@@ -5,32 +5,41 @@
         @mouseleave="hover = false"
         @click="hover = !hover"
     >
-        <img :src="photo.url" class="pixbay-photo img-thumbnail" alt=":(">
-        <b-badge
-            v-if="showAuthor"
-            class="label-default"
-            variant="dark"
-        >
-            {{photo.user}}
-        </b-badge>
-        <b-button
-            v-if="showAddToFavourites"
-            @click="storePhoto"
-            v-show="hover && !stored"
-            variant="dark"
-            class="button-save"
-        >
-            <b-icon-star variant="light"/>
-        </b-button>
-        <b-button
-            v-else
-            @click="deletePhoto"
-            v-show="hover && !deleted"
-            variant="danger"
-            class="button-delete"
-        >
-            <b-icon-x variant="light"/>
-        </b-button>
+        <div class="photo" v-if="(!stored && !deleted) || !loading">
+            <img :src="photo.url" class="pixbay-photo img-thumbnail" alt=":(">
+            <b-badge
+                v-if="showAuthor"
+                class="label-default"
+                variant="dark"
+            >
+                {{photo.user}}
+            </b-badge>
+            <b-button
+                v-if="showAddToFavourites && !stored"
+                @click="storePhoto"
+                v-show="hover"
+                variant="dark"
+                class="button-save"
+            >
+                <b-icon-star variant="light"/>
+            </b-button>
+            <b-button
+                v-else-if="!showAddToFavourites"
+                @click="deletePhoto"
+                v-show="hover && !deleted"
+                variant="danger"
+                class="button-delete"
+            >
+                <b-icon-x variant="light"/>
+            </b-button>
+        </div>
+        <div class="d-flex" style="height: 100%" v-else-if="loading">
+            <b-spinner
+                class="m-auto"
+                type="grow"
+                variant="primary"
+            />
+        </div>
     </div>
 </template>
 
@@ -43,6 +52,7 @@ export default {
         hover: false,
         stored: false,
         deleted: false,
+        loading: false,
     }),
 
     components: {
@@ -66,7 +76,7 @@ export default {
     methods: {
         storePhoto(e) {
             e.stopPropagation();
-            this.stored = true;
+            this.stored  = true;
             this.$emit('storePhoto', {
                 photoUrl: this.photo.url,
                 photoId: this.photo.id
@@ -75,14 +85,18 @@ export default {
 
         deletePhoto(e) {
             e.stopPropagation();
+            this.deleted = true;
             if (!confirm('Are you sure you want to remove this from favourites?')) {
                 return;
             }
 
-            this.deleted = true;
             this.$emit('deletePhoto', {
                photoId: this.photo.id,
             });
+        },
+
+        setLoading(value) {
+            this.loading = value;
         }
     }
 }
@@ -106,8 +120,8 @@ export default {
 
     .button-save {
         position: absolute;
-        bottom: 1vh;
-        right: 40%;
+        top: 1vh;
+        right: 5%;
     }
 
     .button-delete {

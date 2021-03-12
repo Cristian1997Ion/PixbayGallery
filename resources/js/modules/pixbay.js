@@ -28,10 +28,14 @@ export default {
 
         },
 
+        LOAD_PHOTOS: (state, payload)  => {
+            state.photos = state.photos.concat(payload.photos);
+        },
+
         REMOVE_PHOTO: (state, payload) => {
             for (let i = 0; i < state.photos.length; i++) {
                 if (state.photos[i].id === payload.id ) {
-                    state.photos = state.photos.splice(state.photos, i);
+                    state.photos.splice(i, 1);
                 }
             }
         }
@@ -39,18 +43,34 @@ export default {
 
     actions: {
         fetchPhotos: ({commit}, payload) => {
-            ApiClient()
+            return ApiClient()
                 .get('/pixbay/photos', {params: payload})
                 .then(response => {
                     commit('SET_DATA', response.data);
                 });
         },
 
+        loadMorePhotos: ({commit}, payload) => {
+            return ApiClient()
+                .get('/pixbay/photos', {params: payload})
+                .then(response => {
+                    commit('LOAD_PHOTOS', response.data);
+                });
+        },
+
         fetchPhotosFromDb: ({commit}, payload) => {
-            ApiClient()
+            return ApiClient()
                 .get('/photos/user', {params: payload})
                 .then(response => {
                     commit('SET_DATA', response.data);
+                });
+        },
+
+        loadMorePhotosFromDb: ({commit}, payload )=> {
+            return ApiClient()
+                .get('/photos/user', {params: payload})
+                .then(response => {
+                    commit('LOAD_PHOTOS', response.data);
                 });
         },
 

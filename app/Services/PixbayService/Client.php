@@ -32,16 +32,18 @@ class Client
         $this->guzzle = new \GuzzleHttp\Client(['base_uri' => $config->getDomain() . '.kikiki']);
     }
 
-    public function getPhotos($searchTerm = ''): GenericPhotosResponse
+    public function getPhotos($page, $searchTerm = ''): GenericPhotosResponse
     {
-        $cacheKey = "photos_{$searchTerm}";
+        $cacheKey = "photos_{$searchTerm}_{$page}";
         if (!$response = Cache::get($cacheKey)) {
             $response = $this->guzzle->get(
                 $this->config->getEndpoint('photos'),
                 [
                     RequestOptions::QUERY => [
-                        'key' => $this->config->getApiKey(),
-                        'q' => $searchTerm
+                        'key'      => $this->config->getApiKey(),
+                        'q'        => $searchTerm,
+                        'page'     => $page,
+                        'per_page' => 21
                     ]
                 ]
             );

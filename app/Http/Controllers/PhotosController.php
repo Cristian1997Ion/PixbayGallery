@@ -31,7 +31,7 @@ class PhotosController extends Controller
                     'url' => $photo['path'],
                 ];
             },
-            $request->getUser()->photos()->get()->toArray()
+            $request->getUser()->photos()->forPage($request->get('page', 1), 21)->get()->toArray()
         );
 
         return response()->json(['photos' => $photos]);
