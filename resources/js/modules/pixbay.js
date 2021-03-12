@@ -6,11 +6,15 @@ export default {
         photoCount: 0,
         photos: [],
         storeMessage: '',
+        cacheKey: null,
+        remainingCacheTime: null,
     }),
 
     mutations: {
         SET_DATA: (state, payload) => {
-            state.photos = payload.photos;
+            state.photos             = payload.photos;
+            state.cacheKey           = payload.cacheKey || state.cacheKey;
+            state.remainingCacheTime = payload.remainingCacheTime || state.remainingCacheTime;
         },
 
         SET_STORE_MESSAGE: (state, payload) => {

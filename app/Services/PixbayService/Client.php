@@ -6,6 +6,7 @@ namespace App\Services\PixbayService;
 use App\Services\PixbayService\Response\GenericPhotosResponse;
 use Exception;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
@@ -34,7 +35,7 @@ class Client
 
     public function getPhotos($page, $searchTerm = ''): GenericPhotosResponse
     {
-        $cacheKey = "photos_{$searchTerm}_{$page}";
+        $cacheKey = "pixbay_photos_{$searchTerm}_{$page}";
         if (!$response = Cache::get($cacheKey)) {
             $response = $this->guzzle->get(
                 $this->config->getEndpoint('photos'),
@@ -52,10 +53,15 @@ class Client
                 throw new Exception("Something went wrong while downloading the photos..");
             }
 
-            $response = $response->getBody()->getContents();
+            $response = [
+                'contents'    => $response->getBody()->getContents(),
+                'cached_at'   => Carbon::now('3')->toString(),
+                'cached_time' => 24 * 3600,
+                'cache_key'   => $cacheKey
+            ];
+
             Cache::put($cacheKey, $response, 24 * 3600);
         }
-
 
         return new GenericPhotosResponse($response);
     }
@@ -84,7 +90,13 @@ class Client
                 throw new Exception("Something went wrong while downloading the photos...");
             }
 
-            $response = $response->getBody()->getContents();
+            $response = [
+                'contents'    => $response->getBody()->getContents(),
+                'cached_at'   => Carbon::now('3')->toString(),
+                'cached_time' => 24 * 3600,
+                'cache_key'   => $cacheKey
+            ];
+
             Cache::put($cacheKey, $response, 24 * 3600);
         }
 

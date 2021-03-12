@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="row pt-3" v-if="cacheKey && remainingCacheTime">
+            <div class="col-md-12 text-center text-info">Photos cached with '{{cacheKey}}' & cache expires in {{remainingCacheTime}}</div>
+        </div>
         <div class="row pt-3">
             <pixbay-photo
                 v-if="photos.length > 0"
@@ -52,6 +55,14 @@ export default {
 
         photos() {
             return this.pixbay.photos || [];
+        },
+
+        cacheKey() {
+            return this.pixbay.cacheKey || false;
+        },
+
+        remainingCacheTime() {
+            return this.pixbay.remainingCacheTime || false;
         }
     },
 
