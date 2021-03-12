@@ -57,7 +57,12 @@ class PhotosController extends Controller
             throw new Exception("You already have this photo saved!");
         }
 
-        $photo = new Photo(['id' => $pixbayPhoto->getId(), 'path' => $pixbayPhoto->getUrl()]);
+        $photo = new Photo([
+            'id' => $pixbayPhoto->getId(),
+            'path' => $pixbayPhoto->getUrl(),
+            'hq_path' => $pixbayPhoto->getUrl()
+        ]);
+
         StorePhotoJob::dispatch(
             $request->getUser(),
             $photo

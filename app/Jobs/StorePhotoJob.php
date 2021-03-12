@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\Photo;
 use App\Models\User;
 use Exception;
-use Intervention\Image\Facades\Image;
 
 class StorePhotoJob extends PhotoJob
 {
@@ -60,22 +59,20 @@ class StorePhotoJob extends PhotoJob
             return;
         }
 
-        $ext       = pathinfo($this->photo->path, PATHINFO_EXTENSION);
-        $photoName = "photo_{$this->photo->id}.{$ext}";
-        $tempPhoto = file_get_contents($this->photo->path);
+        $thumb   = Photo::downloadPhoto($this->photo->path);
+        $hqPhoto = Photo::downloadPhoto($this->photo->hq_path);
 
-        if ($tempPhoto === false) {
-            throw new Exception("Failed to get pixbay photo: " . $this->photo->path);
-        }
+        $thumb
+            ->resize($thumb->width() / 2, $thumb->height() / 2)
+            ->save($this->photo->getStoragePath('thumbnail'));
 
-        $photo = Image::make($tempPhoto);
-        $photo
-            ->resize($photo->width() / 2, $photo->height() / 2)
-            ->save(storage_path('app/public/') . $photoName);
+        $hqPhoto
+            ->save($this->photo->getStoragePath('hq'));
 
         $this->user->photos()->create([
             'id'   => $this->photo->id,
-            'path' => 'http://localhost:8000/storage/' . $photoName
+            'path' => 'http://localhost:8000/storage/' . $this->photo->getName('thumbnail'),
+            'hq_path' => 'http://localhost:8000/storage/' . $this->photo->getName('hq'),
         ]);
 
     }

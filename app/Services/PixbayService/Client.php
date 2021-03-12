@@ -95,7 +95,7 @@ class Client
             throw new Exception("Photo not found");
         }
 
-        return new Photo($photos[0]['id'], $photos[0]['user'], $photos[0]['url']);
+        return new Photo($photos[0]['id'], $photos[0]['user'], $photos[0]['url'], $photos[0]['hqUrl']);
     }
 
     /**

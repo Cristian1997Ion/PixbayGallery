@@ -42,11 +42,11 @@ class GenericPhotosResponse implements Responsable
 
         $response = json_decode($response['contents']);
         foreach ($response->hits as $photo) {
-            $this->photoCount++;
             $this->photos[] = [
-                'id'   => $photo->id,
-                'url'  => $photo->webformatURL,
-                'user' => $photo->user
+                'id'    => $photo->id,
+                'url'   => $photo->webformatURL,
+                'user'  => $photo->user,
+                'hqUrl' => $photo->fullHDURL ?? ($photo->largeImageURL ?? ''),
             ];
         }
     }

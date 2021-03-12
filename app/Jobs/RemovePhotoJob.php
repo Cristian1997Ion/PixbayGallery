@@ -42,11 +42,9 @@ class RemovePhotoJob extends PhotoJob
             return;
         }
 
-        $ext       = pathinfo($this->photo->path, PATHINFO_EXTENSION);
-        $photoName = "photo_{$this->photo->id}.{$ext}";
-
         // no one is using this image
-        unlink(storage_path("app/public/") . $photoName);
+        unlink($this->photo->getStoragePath('hq'));
+        unlink($this->photo->getStoragePath('thumbnail'));
         $this->photo->delete();
     }
 }

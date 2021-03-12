@@ -6,35 +6,83 @@ namespace App\Services\PixbayService;
 
 final class Photo
 {
+    /**
+     * @var int
+     */
     private $id;
+
+    /**
+     * @var string
+     */
     private $author;
+
+    /**
+     * @var string
+     */
     private $url;
 
-    public static function make($id, $author, $url): Photo
+    /**
+     * @var string
+     */
+    private $hqUrl;
+
+    /**
+     * @param int $id
+     * @param string $author
+     * @param string $url
+     * @param string $hqUrl
+     * @return Photo
+     */
+    public static function make(int $id, string $author, string $url, string $hqUrl): Photo
     {
-        return new self($id, $author, $url);
+        return new self($id, $author, $url, $hqUrl);
     }
 
-    public function __construct($id, $author, $url)
+    /**
+     * Photo constructor.
+     * @param int $id
+     * @param string $author
+     * @param string $url
+     * @param string $hqUrl
+     */
+    public function __construct(int $id, string $author, string $url, string $hqUrl)
     {
         $this->id     = $id;
         $this->author = $author;
         $this->url    = $url;
+        $this->hqUrl  = $hqUrl;
     }
 
-    public function getId()
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getAuthor()
+    /**
+     * @return string
+     */
+    public function getAuthor(): string
     {
         return $this->author;
     }
 
-    public function getUrl()
+    /**
+     * @return string
+     */
+    public function getUrl(): string
     {
         return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHQUrl(): string
+    {
+        return $this->getUrl();
     }
 
 

@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/web{any}', SpaController::class . '@index')-> where('any', '.*');
+Route::get('/', function () {return redirect('/web');});
