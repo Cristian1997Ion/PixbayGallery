@@ -7,6 +7,8 @@ use App\Http\Requests\StorePhotoRequest;
 use App\Http\Requests\UserPhotosRequest;
 use App\Jobs\RemovePhotoJob;
 use App\Jobs\StorePhotoJob;
+use App\Models\Photo;
+use App\Services\PixbayService\Client;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -14,25 +16,28 @@ class PhotosController extends Controller
 {
     /**
      * @param StorePhotoRequest $request
+     * @param Client $pixbayService
      * @return JsonResponse
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function store(StorePhotoRequest $request): JsonResponse
+    public function store(StorePhotoRequest $request, Client $pixbayService): JsonResponse
     {
-        $photo = $request
+        $pixbayPhoto = $pixbayService->getPhoto($request->json('photoId'));
+        $userPhoto   = $request
             ->getUser()
             ->photos()
             ->where('id', $request->json('photoId'))
-            ->first();
+            ->first()
+        ;
 
-        if (!empty($photo)) {
+        if (!empty($userPhoto)) {
             throw new Exception("You already have this photo saved!");
         }
 
+        $photo = new Photo(['id' => $pixbayPhoto->getId(), 'path' => $pixbayPhoto->getUrl()]);
         StorePhotoJob::dispatch(
             $request->getUser(),
-            $request->json('photoId'),
-            $request->json('photoUrl')
+            $photo
         );
 
         return response()->json(['success' => 'true']);
@@ -55,7 +60,7 @@ class PhotosController extends Controller
 
     public function removeUserPhoto(RemovePhotoRequest $request): JsonResponse
     {
-        RemovePhotoJob::dispatchNow(
+        RemovePhotoJob::dispatch(
             $request->getUser(),
             $request->getPhoto(),
         );

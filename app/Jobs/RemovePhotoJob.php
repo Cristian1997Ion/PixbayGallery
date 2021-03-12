@@ -4,31 +4,11 @@ namespace App\Jobs;
 
 use App\Models\Photo;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
 
-class RemovePhotoJob implements ShouldQueue
+class RemovePhotoJob extends PhotoJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * @var int
-     */
-    protected $photoId;
-
-    /**
-     * @var Photo
-     */
-    protected $photo;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -38,8 +18,7 @@ class RemovePhotoJob implements ShouldQueue
      */
     public function __construct(User $user, Photo $photo)
     {
-        $this->user  = $user;
-        $this->photo = $photo;
+        parent::__construct($user, $photo);
     }
 
     /**
@@ -63,8 +42,11 @@ class RemovePhotoJob implements ShouldQueue
             return;
         }
 
+        $ext       = pathinfo($this->photo->path, PATHINFO_EXTENSION);
+        $photoName = "photo_{$this->photo->id}.{$ext}";
+
         // no one is using this image
-        Storage::delete("/photo_{$this->photo->id}.jpg");
+        unlink(storage_path("app/public/") . $photoName);
         $this->photo->delete();
     }
 }

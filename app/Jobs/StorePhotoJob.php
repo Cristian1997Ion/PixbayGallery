@@ -4,16 +4,12 @@ namespace App\Jobs;
 
 use App\Models\Photo;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Exception;
 use Intervention\Image\Facades\Image;
 
-class StorePhotoJob implements ShouldQueue
+class StorePhotoJob extends PhotoJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    // Don't use SerializeModels, if tries to get a newRecord from db...
 
     /**
      * @var User
@@ -21,67 +17,64 @@ class StorePhotoJob implements ShouldQueue
     protected $user;
 
     /**
-     * @var string
+     * @var Photo
      */
-    protected $photoUrl;
-
-    /**
-     * @var int
-     */
-    protected $photoId;
+    protected $photo;
 
     /**
      * Create a new job instance.
      * @param User $user
-     * @param int $photoId
-     * @param string $photoUrl
+     * @param Photo $photo
      */
-    public function __construct(User $user, int $photoId, string $photoUrl)
+    public function __construct(User $user, Photo $photo)
     {
-        $this->user     = $user;
-        $this->photoId  = $photoId;
-        $this->photoUrl = $photoUrl;
+        parent::__construct($user, $photo);
     }
 
     /**
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
-        sleep(5);
-        $photo = $this
+        $userPhoto = $this
             ->user
             ->photos()
-            ->where('id', $this->photoId)
+            ->where('id', $this->photo->id)
             ->first();
 
-        if (!empty($photo)) {
+        if (!empty($userPhoto)) {
             // Photo was saved on an earlier job
             return;
         }
 
         $photo = Photo::query()
-            ->where('id', $this->photoId)
+            ->where('id', $this->photo->id)
             ->first();
+
         if (!empty($photo)) {
             // no need to generate another thumbnail, just update the reference
             $this->user->photos()->save($photo);
             return;
         }
 
-        $ext       = pathinfo($this->photoUrl, PATHINFO_EXTENSION);
-        $photoName = "photo_{$this->photoId}.{$ext}";
-        $tempPhoto = file_get_contents($this->photoUrl);
-        $photo     = Image::make($tempPhoto);
+        $ext       = pathinfo($this->photo->path, PATHINFO_EXTENSION);
+        $photoName = "photo_{$this->photo->id}.{$ext}";
+        $tempPhoto = file_get_contents($this->photo->path);
 
+        if ($tempPhoto === false) {
+            throw new Exception("Failed to get pixbay photo: " . $this->photo->path);
+        }
+
+        $photo = Image::make($tempPhoto);
         $photo
             ->resize($photo->width() / 2, $photo->height() / 2)
             ->save(storage_path('app/public/') . $photoName);
 
         $this->user->photos()->create([
-            'id'   => $this->photoId,
+            'id'   => $this->photo->id,
             'path' => 'http://localhost:8000/storage/' . $photoName
         ]);
 

@@ -33,6 +33,11 @@ class GenericPhotosResponse implements Responsable
         }
     }
 
+    public function getPhotos(): array
+    {
+        return $this->photos;
+    }
+
     public function asArray(): array
     {
         return [
