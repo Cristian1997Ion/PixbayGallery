@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property int $id same as Pixbay ids
  * @property string $path
  * @property string $created_at
+ * @property User[] $users
  */
 class Photo extends Model
 {

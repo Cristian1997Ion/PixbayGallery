@@ -13,6 +13,8 @@ class StorePhotoRequest extends PrivateUserRequest
      */
     protected $user;
 
+    protected const ACCEPTED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -31,11 +33,25 @@ class StorePhotoRequest extends PrivateUserRequest
     public function rules(): array
     {
         return [
-            'userId'      => ['required'],
-            'token'       => ['required'],
-            'photoId'     => ['required'],
-            'photoUrl'    => ['required'],
+            'userId'         => ['required'],
+            'token'          => ['required'],
+            'photoId'        => ['required'],
+            'photoUrl'       => [
+                'required',
+                function($attribute, $value, $fail) {
+                    $ext = pathinfo($value, PATHINFO_EXTENSION);
+                    if (in_array($ext, self::ACCEPTED_EXTENSIONS)) {
+                        return;
+                    }
 
+                    $error = sprintf(
+                        "extension not supported (supported: %s)",
+                        implode(', ',self::ACCEPTED_EXTENSIONS)
+                    );
+
+                    $fail($error);
+                }
+            ]
         ];
     }
 }

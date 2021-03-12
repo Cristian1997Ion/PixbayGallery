@@ -5,42 +5,54 @@
         @mouseleave="hover = false"
         @click="hover = !hover"
     >
-        <img :src="image.url" class="pixbay-photo img-thumbnail" alt=":(">
+        <img :src="photo.url" class="pixbay-photo img-thumbnail" alt=":(">
         <b-badge
             v-if="showAuthor"
             class="label-default"
             variant="dark"
         >
-            {{image.user}}
+            {{photo.user}}
         </b-badge>
         <b-button
             v-if="showAddToFavourites"
             @click="storePhoto"
-            v-show="hover"
+            v-show="hover && !stored"
             variant="dark"
             class="button-save"
         >
             <b-icon-star variant="light"/>
         </b-button>
+        <b-button
+            v-else
+            @click="deletePhoto"
+            v-show="hover && !deleted"
+            variant="danger"
+            class="button-delete"
+        >
+            <b-icon-x variant="light"/>
+        </b-button>
     </div>
 </template>
 
 <script>
-import { BIcon, BIconStar} from 'bootstrap-vue'
+import { BIcon, BIconStar, BIconX} from 'bootstrap-vue'
 export default {
     name: "PixbayPhoto",
 
     data: () => ({
-       hover: false
+        hover: false,
+        stored: false,
+        deleted: false,
     }),
 
     components: {
         BIcon,
-        BIconStar
+        BIconStar,
+        BIconX
     },
 
     props: {
-        image: Object,
+        photo: Object,
         showAddToFavourites: {
             type: Boolean,
             default: true,
@@ -54,9 +66,22 @@ export default {
     methods: {
         storePhoto(e) {
             e.stopPropagation();
+            this.stored = true;
             this.$emit('storePhoto', {
-                photoUrl: this.image.url,
-                photoId: this.image.id
+                photoUrl: this.photo.url,
+                photoId: this.photo.id
+            });
+        },
+
+        deletePhoto(e) {
+            e.stopPropagation();
+            if (!confirm('Are you sure you want to remove this from favourites?')) {
+                return;
+            }
+
+            this.deleted = true;
+            this.$emit('deletePhoto', {
+               photoId: this.photo.id,
             });
         }
     }
@@ -83,6 +108,12 @@ export default {
         position: absolute;
         bottom: 1vh;
         right: 40%;
+    }
+
+    .button-delete {
+        position: absolute;
+        top: 1vh;
+        right: 5%;
     }
 }
 </style>

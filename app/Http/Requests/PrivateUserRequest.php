@@ -14,6 +14,14 @@ abstract class PrivateUserRequest extends FormRequest
      */
     protected $user;
 
+    public function prepareForValidation()
+    {
+        $this->user = User::query()
+            ->where('id', $this->request->get('userId'))
+            ->where('token', $this->request->get('token'))
+            ->first();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -21,17 +29,10 @@ abstract class PrivateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $user = User::query()
-            ->where('id', $this->request->get('userId'))
-            ->where('token', $this->request->get('token'))
-            ->first();
-
-        if (empty($user)) {
+        if (empty($this->user)) {
             // token and user_id don't match
             return false;
         }
-
-        $this->user = $user;
 
         return true;
     }

@@ -16,8 +16,23 @@ export default {
         SET_STORE_MESSAGE: (state, payload) => {
             if (payload.error) {
                 state.storeMessage = payload.error;
-            } else {
-                state.storeMessage = "Relax... your photo will be saved soon :)"
+                return;
+            }
+
+            if (payload.errors) {
+                state.storeMessage = payload.errors[Object.keys(payload.errors)[0]];
+                return;
+            }
+
+            state.storeMessage = "Relax... your photo will be saved soon :)";
+
+        },
+
+        REMOVE_PHOTO: (state, payload) => {
+            for (let i = 0; i < state.photos.length; i++) {
+                if (state.photos[i].id === payload.id ) {
+                    state.photos = state.photos.splice(state.photos, i);
+                }
             }
         }
     },
@@ -45,6 +60,14 @@ export default {
                 .then(response => {
                     commit('SET_STORE_MESSAGE', response.data);
                 });
+        },
+
+        removePhoto: ({commit}, payload) => {
+            return ApiClient()
+                .post('/photos/remove', payload)
+                .then(() => {
+                    commit('REMOVE_PHOTO', {id: payload.photoId});
+                })
         }
     }
 }

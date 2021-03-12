@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RemovePhotoRequest;
 use App\Http\Requests\StorePhotoRequest;
 use App\Http\Requests\UserPhotosRequest;
+use App\Jobs\RemovePhotoJob;
 use App\Jobs\StorePhotoJob;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -49,5 +51,15 @@ class PhotosController extends Controller
         );
 
         return response()->json(['photos' => $photos]);
+    }
+
+    public function removeUserPhoto(RemovePhotoRequest $request): JsonResponse
+    {
+        RemovePhotoJob::dispatchNow(
+            $request->getUser(),
+            $request->getPhoto(),
+        );
+
+        return response()->json(['success' => true]);
     }
 }

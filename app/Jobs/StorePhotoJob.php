@@ -82,7 +82,7 @@ class StorePhotoJob implements ShouldQueue
 
         $this->user->photos()->create([
             'id'   => $this->photoId,
-            'path' => asset('/storage/' . $photoName)
+            'path' => 'http://localhost:8000/storage/' . $photoName
         ]);
 
     }

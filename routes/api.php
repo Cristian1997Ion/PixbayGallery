@@ -26,4 +26,5 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/pixbay/photos', [PixbayController::class, 'getImages']);
 Route::middleware('auth:api')->post('/photos/store', [PhotosController::class, 'store']);
+Route::middleware('auth:api')->post('/photos/remove', [PhotosController::class, 'removeUserPhoto']);
 Route::middleware('auth:api')->get('/photos/user', [PhotosController::class, 'getUserPhotos']);

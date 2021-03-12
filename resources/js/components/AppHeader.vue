@@ -12,7 +12,14 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown right>
                     <template #button-content>
-                        <em>User</em>
+                        <em>
+                            <span v-if="authenticated">
+                                {{username}}
+                            </span>
+                            <span v-else>
+                                Hello
+                            </span>
+                        </em>
                     </template>
                     <div v-if="authenticated">
                         <b-dropdown-item href="#">
@@ -41,6 +48,10 @@ export default {
 
         authenticated: function() {
             return this.auth.user.token !== null;
+        },
+
+        username: function () {
+            return this.auth.user.name;
         }
     },
 

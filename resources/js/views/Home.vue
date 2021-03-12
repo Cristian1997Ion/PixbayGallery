@@ -4,7 +4,7 @@
             <pixbay-photo
                 v-for="photo in photos"
                 v-bind:key="photo.id"
-                :image="photo"
+                :photo="photo"
                 class="mb-2 col-md-4"
                 @storePhoto="onStorePhoto"
             />
@@ -39,7 +39,7 @@ export default {
 
     methods: {
         registerModule() {
-            if(this.$store.hasModule('pixbay')) return;
+            //if(this.$store.hasModule('pixbay')) return;
 
             this.$store.registerModule('pixbay', pixbay);
         },

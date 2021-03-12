@@ -5,10 +5,11 @@
             <pixbay-photo
                 v-for="photo in photos"
                 v-bind:key="photo.id"
-                :image="photo"
+                :photo="photo"
                 class="mb-2 col-md-4"
                 :show-add-to-favourites="false"
                 :show-author="false"
+                @deletePhoto="onDeletePhoto"
             />
         </div>
     </div>
@@ -50,7 +51,7 @@ export default {
 
     methods: {
         registerModule() {
-            if(this.$store.hasModule('pixbay')) return;
+            //if(this.$store.hasModule('pixbay')) return;
 
             this.$store.registerModule('pixbay', pixbay);
         },
@@ -63,6 +64,14 @@ export default {
             this.$store.dispatch('pixbay/fetchPhotosFromDb', {
                 userId: this.auth.user.id,
                 token: this.auth.user.token,
+            });
+        },
+
+        onDeletePhoto(payload) {
+            this.$store.dispatch('pixbay/removePhoto', {
+                photoId: payload.photoId,
+                token: this.auth.user.token,
+                userId: this.auth.user.id,
             });
         }
     }
