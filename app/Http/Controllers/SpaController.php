@@ -8,6 +8,9 @@ namespace App\Http\Controllers;
  */
 class SpaController extends Controller
 {
+    /**
+     * @return string
+     */
     public function index(): string
     {
         return view('spa');

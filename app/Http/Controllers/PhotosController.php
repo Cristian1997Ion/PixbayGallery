@@ -12,8 +12,31 @@ use App\Services\PixbayService\Client;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class PhotosController
+ * @package App\Http\Controllers
+ */
 class PhotosController extends Controller
 {
+    /**
+     * @param UserPhotosRequest $request
+     * @return JsonResponse
+     */
+    public function getUserPhotos(UserPhotosRequest $request): JsonResponse
+    {
+        $photos = array_map(
+            function($photo){
+                return [
+                    'id'   => $photo['id'],
+                    'url' => $photo['path'],
+                ];
+            },
+            $request->getUser()->photos()->get()->toArray()
+        );
+
+        return response()->json(['photos' => $photos]);
+    }
+
     /**
      * @param StorePhotoRequest $request
      * @param Client $pixbayService
@@ -43,21 +66,10 @@ class PhotosController extends Controller
         return response()->json(['success' => 'true']);
     }
 
-    public function getUserPhotos(UserPhotosRequest $request): JsonResponse
-    {
-        $photos = array_map(
-            function($photo){
-                return [
-                    'id'   => $photo['id'],
-                    'url' => $photo['path'],
-                ];
-            },
-            $request->getUser()->photos()->get()->toArray()
-        );
-
-        return response()->json(['photos' => $photos]);
-    }
-
+    /**
+     * @param RemovePhotoRequest $request
+     * @return JsonResponse
+     */
     public function removeUserPhoto(RemovePhotoRequest $request): JsonResponse
     {
         RemovePhotoJob::dispatch(

@@ -7,6 +7,10 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class PrivateUserRequest
+ * @package App\Http\Requests
+ */
 abstract class PrivateUserRequest extends FormRequest
 {
     /**
@@ -37,6 +41,9 @@ abstract class PrivateUserRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @return User
+     */
     public function getUser(): User
     {
         return $this->user;

@@ -4,8 +4,15 @@ namespace App\Http\Requests;
 
 use App\Models\Photo;
 
+/**
+ * Class RemovePhotoRequest
+ * @package App\Http\Requests
+ */
 class RemovePhotoRequest extends PrivateUserRequest
 {
+    /**
+     * @var Photo
+     */
     protected $photo;
 
     /**
@@ -23,7 +30,7 @@ class RemovePhotoRequest extends PrivateUserRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'photoId' => ['required'],
@@ -41,7 +48,10 @@ class RemovePhotoRequest extends PrivateUserRequest
         parent::prepareForValidation();
     }
 
-    public function getPhoto()
+    /**
+     * @return Photo
+     */
+    public function getPhoto(): Photo
     {
         return $this->photo;
     }

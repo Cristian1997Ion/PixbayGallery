@@ -7,6 +7,10 @@ namespace App\Http\Responses\Auth;
 use App\Models\User;
 use Illuminate\Contracts\Support\Responsable;
 
+/**
+ * Class SuccessResponse
+ * @package App\Http\Responses\Auth
+ */
 class SuccessResponse implements Responsable
 {
     /**
@@ -14,11 +18,18 @@ class SuccessResponse implements Responsable
      */
     protected $user;
 
+    /**
+     * SuccessResponse constructor.
+     * @param User $user
+     */
     public function __construct(User $user)
     {
         $this->user = $user;
     }
 
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return [

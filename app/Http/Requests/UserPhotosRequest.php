@@ -6,6 +6,10 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 
+/**
+ * Class UserPhotosRequest
+ * @package App\Http\Requests
+ */
 class UserPhotosRequest extends PrivateUserRequest
 {
     /**

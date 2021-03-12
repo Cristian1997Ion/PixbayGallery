@@ -11,10 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+/**
+ * Class AuthController
+ * @package App\Http\Controllers
+ */
 class AuthController extends Controller
 {
     /**
      * @param Request $request
+     * @return FailResponse|SuccessResponse
      * @throws \Exception
      */
     public function login(Request $request)

@@ -1,19 +1,21 @@
 <?php
 
-
 namespace App\Http\Requests;
-
 
 use App\Models\User;
 
+/**
+ * Class StorePhotoRequest
+ * @package App\Http\Requests
+ */
 class StorePhotoRequest extends PrivateUserRequest
 {
+    protected const ACCEPTED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
+
     /**
      * @var User
      */
     protected $user;
-
-    protected const ACCEPTED_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -38,7 +40,7 @@ class StorePhotoRequest extends PrivateUserRequest
             'photoId'        => ['required'],
             'photoUrl'       => [
                 'required',
-                function($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) {
                     $ext = pathinfo($value, PATHINFO_EXTENSION);
                     if (in_array($ext, self::ACCEPTED_EXTENSIONS)) {
                         return;
