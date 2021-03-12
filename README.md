@@ -9,7 +9,8 @@ Steps:
 - run: php artisan migrate
 - run: php artisan storage:link
 - run: php artisan serve
-- run: npm watch
+- run: npm run watch
 
 #################################################
 - Cache / Queue was tested via Redis Driver 
+- Don't forget to run: php artisan queue:work redis
