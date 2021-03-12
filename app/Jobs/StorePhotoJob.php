@@ -71,8 +71,8 @@ class StorePhotoJob extends PhotoJob
 
         $this->user->photos()->create([
             'id'   => $this->photo->id,
-            'path' => 'http://localhost:8000/storage/' . $this->photo->getName('thumbnail'),
-            'hq_path' => 'http://localhost:8000/storage/' . $this->photo->getName('hq'),
+            'path' => '/storage/' . $this->photo->getName('thumbnail'),
+            'hq_path' => '/storage/' . $this->photo->getName('hq'),
         ]);
 
     }
